@@ -15,8 +15,9 @@ final class NewTrackerViewController: UIViewController {
     weak var delegate: NewTrackerViewControllerDelegate?
     var typeOfNewTracker: TypeTracker?
     private var heightTableView: CGFloat = 74
-    private var currentCategory: String?
+    private var currentCategory: String? = "Новая категория"
     private var trackerText = ""
+    private var schedule: [WeekDay] = []
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -135,13 +136,22 @@ final class NewTrackerViewController: UIViewController {
     }
     
     @objc private func cancelButtonTapped() {
-        dismiss(animated: true)
+        dismiss(animated: true) {
+        }
     }
     
     @objc private func createButtonTapped() {
-        delegate?.addNewTrackerCategory(TrackerCategory(title: "Новая категория", trackers: [Tracker(id: UUID(), text: trackerText, emoji: "❤️", color: .trRed, schedule: nil)]))
-        
-        dismiss(animated: true)
+        dismiss(animated: true) {
+            self.delegate?.addNewTrackerCategory(TrackerCategory(title: "Новая категория", trackers: [Tracker(id: UUID(), text: self.trackerText, emoji: "❤️", color: .trRed, schedule: self.schedule)]))
+        }
+    }
+    
+    private func buttonIsEnabled() {
+        if textField.text?.isEmpty == false && ((currentCategory?.isEmpty) != nil) {
+            saveButton.backgroundColor = .trBlack
+            saveButton.setTitleColor(.trWhite, for: .normal)
+            saveButton.isEnabled = true
+        }
     }
 }
 
@@ -185,6 +195,35 @@ extension NewTrackerViewController: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if range.location == 0 && string == " " {
+            return false
+        }
+        
+        switch typeOfNewTracker {
+        case .habitTracker:
+            if schedule.isEmpty == false {
+                buttonIsEnabled()
+                return true
+            }
+        case .eventTracker:
+            buttonIsEnabled()
+            return true
+        case .none:
+            return true
+        }
+        return true
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        if textField.text?.isEmpty == true {
+            saveButton.backgroundColor = .trGray
+            saveButton.setTitleColor(.trWhite, for: .normal)
+            saveButton.isEnabled = false
+        }
+    }
 }
 
 extension NewTrackerViewController: UITableViewDelegate {
@@ -194,8 +233,17 @@ extension NewTrackerViewController: UITableViewDelegate {
             break
         case 1:
             let scheduleVC = ScheduleViewController()
+            scheduleVC.delegate = self
             present(scheduleVC, animated: true)
         default: break
         }
+    }
+}
+
+extension NewTrackerViewController: ScheduleViewControllerDelegate {
+    func addNewSchedule(_ newSchedule: [WeekDay]) {
+        schedule = newSchedule
+        
+        buttonIsEnabled()
     }
 }

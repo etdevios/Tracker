@@ -29,7 +29,6 @@ final class TypeNewTrackerViewController: UIViewController {
         stackView.spacing = 16
         return stackView
     }()
-
     
     private lazy var newHabitButton: UIButton = {
         let button = UIButton(type: .system)
@@ -93,7 +92,7 @@ final class TypeNewTrackerViewController: UIViewController {
             
             newHabitButton.heightAnchor.constraint(equalToConstant: 60),
             newEventButton.heightAnchor.constraint(equalTo: newHabitButton.heightAnchor),
-
+            
             verticalStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             verticalStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             verticalStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)

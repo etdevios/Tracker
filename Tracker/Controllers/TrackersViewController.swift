@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 final class TrackersViewController: UIViewController {
     private var currentDate = Date()
     private var mockCategories: [TrackerCategory] = []
@@ -45,13 +43,13 @@ final class TrackersViewController: UIViewController {
     
     private lazy var infoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "star")
+        imageView.image = UIImage(named: "searchError")
         return imageView
     }()
     
     private let infoLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = "Ничего не найдено"
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = .trBlack
         label.textAlignment = .center
@@ -61,11 +59,6 @@ final class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mockCategories = [TrackerCategory(title: "Домашняя кухня", trackers: [Tracker(id: UUID(), text: "New", emoji: "🍏", color: .trBlue, schedule: nil)])]
-        mockCategories.append(TrackerCategory(title: "УБорка", trackers: [Tracker(id: UUID(), text: "NEws", emoji: "♻️", color: .trRed, schedule: nil)]))
-        categories = mockCategories
-        
-        updateVisibleCategories()
         setBar()
         setupView()
         addSubviews()
@@ -89,21 +82,18 @@ final class TrackersViewController: UIViewController {
     
     @objc private func handleDatePicker() {
         currentDate = datePicker.date
-        print(currentDate)
+        self.dismiss(animated: false)
+        updateVisibleCategories()
     }
     
     private func setupView() {
         view.backgroundColor = .trWhite
         
-        if categories.isEmpty {
-            trackerCollectionView.isHidden = true
-            infoLabel.isHidden = false
-            infoImageView.isHidden = false
-        } else {
-            trackerCollectionView.isHidden = false
-            infoLabel.isHidden = true
-            infoImageView.isHidden = true
-        }
+        trackerCollectionView.isHidden = categories.isEmpty
+        infoLabel.isHidden = !categories.isEmpty
+        infoImageView.isHidden = !categories.isEmpty
+        infoLabel.text = "Что будем отслеживать?"
+        infoImageView.image = UIImage(named: "star")
     }
     
     private func addSubviews() {
@@ -131,19 +121,23 @@ final class TrackersViewController: UIViewController {
     }
     
     private func updateVisibleCategories() {
-        var categoriesFiltered = categories.map { filterTrackerCategory(category: $0) }
+        var categoriesFiltered = categories.map { filterTrackerCategoryByDate(category: $0) }
         categoriesFiltered = categoriesFiltered.filter { !$0.trackers.isEmpty }
+        if categoriesFiltered.isEmpty {
+            if textOfSearchQuery.isEmpty {
+                infoLabel.text = "Ничего не найдено"
+                infoImageView.image = UIImage(named: "searchError")
+            }
+        }
         visibleCategories = categoriesFiltered
         trackerCollectionView.reloadData()
     }
-
-
-    private func filterTrackerCategory(category: TrackerCategory) -> TrackerCategory {
-        let trackers = category.trackers.filter( { ($0.text.contains(textOfSearchQuery) || textOfSearchQuery == "") })
+    
+    private func filterTrackerCategoryByDate(category: TrackerCategory) -> TrackerCategory {
+        let trackers = category.trackers.filter( { ($0.text.contains(textOfSearchQuery) || textOfSearchQuery.isEmpty) && ($0.schedule.contains(where: { $0.dayNumberOfWeek == currentDate.dayNumberOfWeek() }))})
         let filterCategory = TrackerCategory(title: category.title, trackers: trackers)
         return filterCategory
     }
-    
 }
 
 extension TrackersViewController: UISearchResultsUpdating {
@@ -155,7 +149,7 @@ extension TrackersViewController: UISearchResultsUpdating {
 
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        trackerCollectionView.isHidden = visibleCategories.count == 0 ? true : false
+        trackerCollectionView.isHidden = visibleCategories.count == 0
         return visibleCategories.count
     }
     
@@ -167,7 +161,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCollectionViewCell.identifier, for: indexPath) as? TrackerCollectionViewCell else { return UICollectionViewCell() }
         let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
         let daysCount = completedTrackers.filter { $0.id == tracker.id }.count
-        let isDoneToday = completedTrackers.contains(where: { $0.id == tracker.id && $0.id == tracker.id }) ? true : false
+        let isDoneToday = completedTrackers.contains(where: { $0.id == tracker.id })
         cell.delegate = self
         cell.configCell(tracker: tracker)
         cell.configRecord(countDays: daysCount, isDoneToday: isDoneToday)
@@ -236,11 +230,24 @@ extension TrackersViewController: TrackerCollectionViewCellDelegate {
 extension TrackersViewController: TypeNewTrackerDelegate {
     func addNewTrackerCategory(_ newTrackerCategory: TrackerCategory) {
         dismiss(animated: true)
+        var trackerCategory = newTrackerCategory
+        if trackerCategory.trackers[0].schedule.isEmpty {
+            
+            guard let numberDay = currentDate.dayNumberOfWeek() else { return }
+            var currentDay = numberDay
+            if numberDay == 1 {
+                currentDay = 8
+            }
+            let newSchedule = WeekDay.allCases[currentDay - 2]
+            trackerCategory.trackers[0].schedule.append(newSchedule)
+        }
+        
         if categories.contains(where: { $0.title == newTrackerCategory.title}) {
-            let index = categories.firstIndex(where: { $0.title == newTrackerCategory.title })!
+            guard let index = categories.firstIndex(where: { $0.title == newTrackerCategory.title }) else { return }
             let oldCategory = categories[index]
             let updatedTrackers = oldCategory.trackers + newTrackerCategory.trackers
             let updatedTrackerByСategory = TrackerCategory(title: newTrackerCategory.title, trackers: updatedTrackers)
+            
             categories[index] = updatedTrackerByСategory
         } else {
             categories.append(newTrackerCategory)

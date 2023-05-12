@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TabBarController: UITabBarController {
+final class TabBarController: UITabBarController {
     private enum TabBarItem: Int {
         case tracker
         case statistic
@@ -29,8 +29,6 @@ class TabBarController: UITabBarController {
                 return "hare.fill"
             }
         }
-        
-        
     }
     
     override func viewDidLoad() {
@@ -40,6 +38,8 @@ class TabBarController: UITabBarController {
     }
     
     private func setupTabBar() {
+        tabBar.barTintColor = .trWhite
+        
         let dataSource: [TabBarItem] = [.tracker, .statistic]
         
         self.viewControllers = dataSource.map {

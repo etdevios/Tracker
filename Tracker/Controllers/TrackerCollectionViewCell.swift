@@ -16,7 +16,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     weak var delegate: TrackerCollectionViewCellDelegate?
     
     private let colorView: UIView = {
-       let view = UIView()
+        let view = UIView()
         view.layer.cornerRadius = 16
         view.backgroundColor = .trRed
         return view
@@ -50,7 +50,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         label.text = "🍏"
         return label
     }()
-
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -59,7 +59,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         label.text = "Поливать растения"
         return label
     }()
-
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -126,11 +126,11 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             emojiLabel.topAnchor.constraint(equalTo: colorView.topAnchor, constant: space),
             emojiLabel.heightAnchor.constraint(equalToConstant: 24),
             emojiLabel.widthAnchor.constraint(equalToConstant: 24),
-
+            
             nameLabel.leadingAnchor.constraint(equalTo: colorView.leadingAnchor, constant: space),
             nameLabel.trailingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: -space),
             nameLabel.bottomAnchor.constraint(equalTo: colorView.bottomAnchor, constant: -space),
-
+            
         ])
     }
 }

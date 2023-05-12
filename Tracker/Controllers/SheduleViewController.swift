@@ -7,7 +7,13 @@
 
 import UIKit
 
-class ScheduleViewController: UIViewController, UITableViewDelegate {
+protocol ScheduleViewControllerDelegate: AnyObject {
+    func addNewSchedule(_ newSchedule: [WeekDay])
+}
+
+final class ScheduleViewController: UIViewController, UITableViewDelegate {
+    private var switchedDays: [WeekDay] = []
+    weak var delegate: ScheduleViewControllerDelegate?
     private var week = WeekDay.allCases
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -40,7 +46,7 @@ class ScheduleViewController: UIViewController, UITableViewDelegate {
         button.layer.cornerRadius = 16
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(completedButtonTapped), for: .touchUpInside)
-        button.isEnabled = true
+        button.isEnabled = false
         return button
     }()
     
@@ -53,7 +59,9 @@ class ScheduleViewController: UIViewController, UITableViewDelegate {
     }
     
     @objc private func completedButtonTapped() {
-        dismiss(animated: true)
+        dismiss(animated: true) {
+            self.delegate?.addNewSchedule(self.switchedDays)
+        }
     }
     
     private func addSubviews() {
@@ -72,14 +80,13 @@ class ScheduleViewController: UIViewController, UITableViewDelegate {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             tableView.heightAnchor.constraint(equalToConstant: 524),
-
+            
             completedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             completedButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             completedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             completedButton.heightAnchor.constraint(equalToConstant: 60),
         ])
     }
-    
 }
 
 extension ScheduleViewController: UITableViewDataSource {
@@ -103,7 +110,30 @@ extension ScheduleViewController: UITableViewDataSource {
         return cell
     }
     
-    @objc private func switchTap() {
-        
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
+    }
+    
+    @objc private func switchTap(_ sender: UISwitch) {
+        if sender.isOn {
+            switchedDays.append(week[sender.tag])
+        } else {
+            if let index = switchedDays.firstIndex(of: week[sender.tag]) {
+                switchedDays.remove(at: index)
+            }
+        }
+        buttonIsEnabled(!switchedDays.isEmpty)
+    }
+    
+    private func buttonIsEnabled(_ isOn: Bool) {
+        completedButton.isEnabled = isOn
+        if isOn {
+            completedButton.backgroundColor = .trBlack
+            completedButton.setTitleColor(.trWhite, for: .normal)
+            
+        } else {
+            completedButton.backgroundColor = .trGray
+            completedButton.setTitleColor(.white, for: .normal)
+        }
     }
 }
