@@ -82,7 +82,7 @@ final class NewTrackerViewController: UIViewController {
         button.layer.cornerRadius = 16
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
-        
+        button.isEnabled = false
         return button
     }()
     

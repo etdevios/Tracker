@@ -38,7 +38,7 @@ final class TabBarController: UITabBarController {
     }
     
     private func setupTabBar() {
-        tabBar.barTintColor = .trWhite
+        tabBar.backgroundColor = .trWhite
         
         let dataSource: [TabBarItem] = [.tracker, .statistic]
         

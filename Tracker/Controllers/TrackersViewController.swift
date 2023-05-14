@@ -9,7 +9,6 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     private var currentDate = Date()
-    private var mockCategories: [TrackerCategory] = []
     private var completedTrackers: Set<TrackerRecord> = []
     private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
@@ -232,7 +231,6 @@ extension TrackersViewController: TypeNewTrackerDelegate {
         dismiss(animated: true)
         var trackerCategory = newTrackerCategory
         if trackerCategory.trackers[0].schedule.isEmpty {
-            
             guard let numberDay = currentDate.dayNumberOfWeek() else { return }
             var currentDay = numberDay
             if numberDay == 1 {
@@ -242,15 +240,15 @@ extension TrackersViewController: TypeNewTrackerDelegate {
             trackerCategory.trackers[0].schedule.append(newSchedule)
         }
         
-        if categories.contains(where: { $0.title == newTrackerCategory.title}) {
-            guard let index = categories.firstIndex(where: { $0.title == newTrackerCategory.title }) else { return }
+        if categories.contains(where: { $0.title == trackerCategory.title}) {
+            guard let index = categories.firstIndex(where: { $0.title == trackerCategory.title }) else { return }
             let oldCategory = categories[index]
-            let updatedTrackers = oldCategory.trackers + newTrackerCategory.trackers
-            let updatedTrackerByСategory = TrackerCategory(title: newTrackerCategory.title, trackers: updatedTrackers)
+            let updatedTrackers = oldCategory.trackers + trackerCategory.trackers
+            let updatedTrackerByСategory = TrackerCategory(title: trackerCategory.title, trackers: updatedTrackers)
             
             categories[index] = updatedTrackerByСategory
         } else {
-            categories.append(newTrackerCategory)
+            categories.append(trackerCategory)
         }
         trackerCollectionView.reloadData()
         updateVisibleCategories()
