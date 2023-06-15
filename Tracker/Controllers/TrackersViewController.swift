@@ -13,6 +13,8 @@ final class TrackersViewController: UIViewController {
     private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
     private var textOfSearchQuery = ""
+    private let trackerCategoryStore = TrackerCategoryStore()
+    private let trackerRecordStore = TrackerRecordStore()
     
     private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
@@ -62,6 +64,10 @@ final class TrackersViewController: UIViewController {
         setupView()
         addSubviews()
         addViewConstraints()
+        
+        categories = trackerCategoryStore.categories
+        completedTrackers = trackerRecordStore.records
+        updateVisibleCategories()
     }
     
     private func setBar() {
@@ -214,15 +220,26 @@ extension TrackersViewController: TrackerCollectionViewCellDelegate {
         let indexPath: IndexPath = trackerCollectionView.indexPath(for: cell) ?? IndexPath()
         let id = visibleCategories[indexPath.section].trackers[indexPath.row].id
         var daysCount = completedTrackers.filter { $0.id == id }.count
-        if !completedTrackers.contains(where: { $0.id == id && $0.date == currentDate }) {
-            completedTrackers.insert(TrackerRecord(id: id, date: currentDate))
+        let formattedCurrentDate = currentDate.dateFormatter()
+        
+        if !completedTrackers.contains(where: { $0.id == id && $0.date == formattedCurrentDate }) {
+            let trackerRecord = TrackerRecord(id: id, date: formattedCurrentDate)
+            try? trackerRecordStore.add(trackerRecord)
             daysCount += 1
+            
             cell.configRecord(countDays: daysCount, isDoneToday: true)
         } else {
-            completedTrackers.remove(TrackerRecord(id: id, date: currentDate))
+            if let recordToRemove = completedTrackers.first(where: { $0.id == id && $0.date == formattedCurrentDate }) {
+                try? trackerRecordStore.remove(TrackerRecord(id: id, date: formattedCurrentDate))
+                
+            }
+            
             daysCount -= 1
             cell.configRecord(countDays: daysCount, isDoneToday: false)
         }
+        completedTrackers = trackerRecordStore.records
+        trackerCollectionView.reloadData()
+        
     }
 }
 
@@ -238,18 +255,13 @@ extension TrackersViewController: TypeNewTrackerDelegate {
             }
             let newSchedule = WeekDay.allCases[currentDay - 2]
             trackerCategory.trackers[0].schedule.append(newSchedule)
+            try! trackerCategoryStore.saveTracker(tracker: trackerCategory.trackers[0], to: trackerCategory.title)
+        } else {
+            try! trackerCategoryStore.saveTracker(tracker: newTrackerCategory.trackers[0], to: newTrackerCategory.title)
         }
         
-        if categories.contains(where: { $0.title == trackerCategory.title}) {
-            guard let index = categories.firstIndex(where: { $0.title == trackerCategory.title }) else { return }
-            let oldCategory = categories[index]
-            let updatedTrackers = oldCategory.trackers + trackerCategory.trackers
-            let updatedTrackerByСategory = TrackerCategory(title: trackerCategory.title, trackers: updatedTrackers)
-            
-            categories[index] = updatedTrackerByСategory
-        } else {
-            categories.append(trackerCategory)
-        }
+        categories = trackerCategoryStore.categories
+        
         trackerCollectionView.reloadData()
         updateVisibleCategories()
     }
