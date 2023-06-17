@@ -72,7 +72,7 @@ final class TrackerCategoryStore: NSObject {
             id: trackerId,
             text: trackerText,
             emoji: trackerEmoji,
-            color: UIColorMarshalling().color(from: trackerColorHex),
+            color: UIColor.color(from: trackerColorHex),
             schedule: WeekDaysMarshalling().convertStringToWeekDays(tracker.trackerSchedule)
         )
     }
@@ -90,9 +90,7 @@ final class TrackerCategoryStore: NSObject {
     }
     
     func saveTracker(tracker: Tracker, to categoryName: String) throws {
-        print(categoryName)
         let trackerCoreData = try trackerStore.makeTracker(from: tracker)
-        print(trackerCoreData)
         if let existingCategory = try? fetchCategory(with: categoryName) {
             var newCoreDataTrackers = existingCategory.trackers!.allObjects as! [TrackerCoreData]
             newCoreDataTrackers.append(trackerCoreData)
@@ -102,8 +100,13 @@ final class TrackerCategoryStore: NSObject {
             newCategory.categoryTitle = categoryName
             newCategory.trackers = NSSet(array: [trackerCoreData])
         }
+        do {
+            try context.save()
+        } catch {
+            let nsError = error as NSError
+             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
         
-        try! context.save()
     }
 }
 

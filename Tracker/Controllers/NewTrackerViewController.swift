@@ -36,7 +36,6 @@ final class NewTrackerViewController: UIViewController {
     private lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.backgroundColor = .trWhite
-        scroll.frame = view.bounds
         
         return scroll
     }()
@@ -116,7 +115,7 @@ final class NewTrackerViewController: UIViewController {
     func setupCollection() {
         collectionView.register(SupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         
-        collectionView.register(EmojiAndColorsCollectionCell.self, forCellWithReuseIdentifier: EmojiAndColorsCollectionCell().identifier)
+        collectionView.register(EmojiAndColorsCollectionCell.self, forCellWithReuseIdentifier: EmojiAndColorsCollectionCell.reuseIdentifier)
         
         collectionView.delegate = emojiAndColorsCollection
         collectionView.dataSource = emojiAndColorsCollection
@@ -222,6 +221,7 @@ extension NewTrackerViewController: UITableViewDataSource {
             cell.detailTextLabel?.text = currentCategory
         case 1:
             cell.textLabel?.text = "Расписание"
+            cell.detailTextLabel?.text = scheduleToString(for: schedule)
         default:
             break
         }
@@ -230,6 +230,14 @@ extension NewTrackerViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
+    }
+    
+    private func scheduleToString(for: [WeekDay]) -> String {
+        guard schedule.count != WeekDay.allCases.count else { return "Каждый день" }
+
+        let scheduleSorted = schedule.sorted()
+        let scheduleShortName = scheduleSorted.map { $0.shortName }.joined(separator: ", ")
+        return scheduleShortName
     }
 }
 
@@ -287,7 +295,7 @@ extension NewTrackerViewController: UITableViewDelegate {
 extension NewTrackerViewController: ScheduleViewControllerDelegate {
     func addNewSchedule(_ newSchedule: [WeekDay]) {
         schedule = newSchedule
-        
+        tableView.reloadData()
         buttonIsEnabled()
     }
 }

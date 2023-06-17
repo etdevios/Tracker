@@ -43,11 +43,8 @@ extension EmojiAndColorsCollection: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiAndColorsCollectionCell().identifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiAndColorsCollectionCell.reuseIdentifier, for: indexPath)
         guard let collectionCell = cell as? EmojiAndColorsCollectionCell else { return UICollectionViewCell() }
-        
-        collectionCell.layer.cornerRadius = 16
-        collectionCell.layer.masksToBounds = true
         
         switch indexPath.section {
         case 0:

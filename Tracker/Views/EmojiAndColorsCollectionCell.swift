@@ -8,7 +8,7 @@
 import UIKit
 
 final class EmojiAndColorsCollectionCell: UICollectionViewCell {
-    let identifier = "EmojiAndColorsCollectionCell"
+    static var reuseIdentifier = "EmojiAndColorsCollectionCell"
     lazy var label: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
@@ -37,6 +37,7 @@ final class EmojiAndColorsCollectionCell: UICollectionViewCell {
         let margins = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
         contentView.frame = contentView.frame.inset(by: margins)
         contentView.layer.cornerRadius = 8
+        contentView.layer.masksToBounds = true
         contentView.clipsToBounds = true
     }
 }

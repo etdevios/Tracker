@@ -30,7 +30,6 @@
 		F6F1FB062A0B7E73005C3A30 /* WeekDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F1FB052A0B7E73005C3A30 /* WeekDay.swift */; };
 		F6F480152A3B06C10019716C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F6D90E7F29F5CA3E00A6CE09 /* Assets.xcassets */; };
 		F6F480162A3B06C80019716C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F6D90E8129F5CA3E00A6CE09 /* LaunchScreen.storyboard */; };
-		F6F480182A3B09260019716C /* UIColorMarshalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F480172A3B09260019716C /* UIColorMarshalling.swift */; };
 		F6F4801A2A3B0C200019716C /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F480192A3B0C200019716C /* TrackerStore.swift */; };
 		F6F4801C2A3B0C530019716C /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F4801B2A3B0C530019716C /* TrackerCategoryStore.swift */; };
 		F6F4801E2A3B0C7B0019716C /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F4801D2A3B0C7B0019716C /* TrackerRecordStore.swift */; };
@@ -66,7 +65,6 @@
 		F6D90E8429F5CA3E00A6CE09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F6F1FB032A0B0B11005C3A30 /* SheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheduleViewController.swift; sourceTree = "<group>"; };
 		F6F1FB052A0B7E73005C3A30 /* WeekDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDay.swift; sourceTree = "<group>"; };
-		F6F480172A3B09260019716C /* UIColorMarshalling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorMarshalling.swift; sourceTree = "<group>"; };
 		F6F480192A3B0C200019716C /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		F6F4801B2A3B0C530019716C /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		F6F4801D2A3B0C7B0019716C /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
@@ -161,7 +159,6 @@
 				F6F480192A3B0C200019716C /* TrackerStore.swift */,
 				F6F4801B2A3B0C530019716C /* TrackerCategoryStore.swift */,
 				F6F4801D2A3B0C7B0019716C /* TrackerRecordStore.swift */,
-				F6F480172A3B09260019716C /* UIColorMarshalling.swift */,
 				F6F4801F2A3B0CEE0019716C /* StoreError.swift */,
 				F6F480212A3B0D010019716C /* StoreUpdates.swift */,
 				F6F480232A3B75610019716C /* WeekDaysMarshalling.swift */,
@@ -272,7 +269,6 @@
 				F6D90E7B29F5CA3700A6CE09 /* TabBarController.swift in Sources */,
 				F6F4801A2A3B0C200019716C /* TrackerStore.swift in Sources */,
 				F6F480262A3BA9A40019716C /* DateHelper.swift in Sources */,
-				F6F480182A3B09260019716C /* UIColorMarshalling.swift in Sources */,
 				F6F1FB062A0B7E73005C3A30 /* WeekDay.swift in Sources */,
 				F66106FE2A0988AF000B74A8 /* Tracker.swift in Sources */,
 				F66107002A0989A8000B74A8 /* TrackerRecord.swift in Sources */,

@@ -27,9 +27,11 @@ final class TrackerRecordStore: NSObject {
         request.returnsObjectsAsFaults = false
         let objects = try? context.fetch(request)
         var recordsSet: Set<TrackerRecord> = []
-        for i in objects! {
-            let record = try! makeTrackerRecord(from: i)
-            recordsSet.insert(record)
+        if let objects {
+            for i in objects {
+                guard let record = try? makeTrackerRecord(from: i) else { return [] }
+                recordsSet.insert(record)
+            }
         }
         
         return recordsSet

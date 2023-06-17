@@ -10,7 +10,6 @@ import CoreData
 
 final class TrackerStore: NSObject {
     private let context: NSManagedObjectContext
-    private let uiColorMarshalling = UIColorMarshalling()
     private let weekDaysMarshalling = WeekDaysMarshalling()
     private var insertedIndexes: IndexSet?
     private var deletedIndexes: IndexSet?
@@ -43,7 +42,7 @@ final class TrackerStore: NSObject {
         trackerCoreData.trackerId = tracker.id
         trackerCoreData.trackerName = tracker.text
         trackerCoreData.trackerEmoji = tracker.emoji
-        trackerCoreData.trackerColor = uiColorMarshalling.hexString(from: tracker.color)
+        trackerCoreData.trackerColor = UIColor.hexString(from: tracker.color)
         
         trackerCoreData.trackerSchedule = weekDaysMarshalling.convertWeekDaysToString(tracker.schedule)
         
