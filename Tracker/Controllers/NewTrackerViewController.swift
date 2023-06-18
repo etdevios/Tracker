@@ -18,6 +18,8 @@ final class NewTrackerViewController: UIViewController {
     private var currentCategory: String? = "Новая категория"
     private var trackerText = ""
     private var schedule: [WeekDay] = []
+    private var emoji = ""
+    private var color: UIColor = .clear
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -29,6 +31,13 @@ final class NewTrackerViewController: UIViewController {
         case .none: break
         }
         return label
+    }()
+    
+    private lazy var scrollView: UIScrollView = {
+        let scroll = UIScrollView()
+        scroll.backgroundColor = .trWhite
+        
+        return scroll
     }()
     
     private lazy var textField: UITextField = {
@@ -86,18 +95,42 @@ final class NewTrackerViewController: UIViewController {
         return button
     }()
     
+    private lazy var collectionView: UICollectionView = {
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collection.backgroundColor = .trWhite
+        return collection
+    }()
+    
+    private let emojiAndColorsCollection = EmojiAndColorsCollection()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .trWhite
         addSubviews()
         addConstraints()
+        setupCollection()
+    }
+    
+    func setupCollection() {
+        collectionView.register(SupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        
+        collectionView.register(EmojiAndColorsCollectionCell.self, forCellWithReuseIdentifier: EmojiAndColorsCollectionCell.reuseIdentifier)
+        
+        collectionView.delegate = emojiAndColorsCollection
+        collectionView.dataSource = emojiAndColorsCollection
+        emojiAndColorsCollection.delegate = self
     }
     
     func addSubviews() {
-        [titleLabel,textField, tableView, saveButton, cancelButton].forEach {
+        [titleLabel, scrollView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
+        }
+        
+        [textField, tableView, collectionView, saveButton, cancelButton].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            scrollView.addSubview($0)
         }
     }
     
@@ -112,26 +145,36 @@ final class NewTrackerViewController: UIViewController {
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 40),
             
-            textField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
-            textField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            textField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            scrollView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            textField.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            textField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
+            textField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
             textField.heightAnchor.constraint(equalToConstant: 75),
             textField.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -32),
             
             tableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 24),
             tableView.leadingAnchor.constraint(equalTo: textField.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: textField.trailingAnchor),
-            tableView.heightAnchor.constraint(equalToConstant: heightTableView),
+            tableView.heightAnchor.constraint(equalToConstant: CGFloat(heightTableView)),
             
-            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            cancelButton.trailingAnchor.constraint(equalTo: saveButton.leadingAnchor, constant: -8),
-            cancelButton.heightAnchor.constraint(equalToConstant: 50),
-            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 32),
+            collectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            collectionView.heightAnchor.constraint(equalToConstant: 484),
             
-            saveButton.heightAnchor.constraint(equalTo: cancelButton.heightAnchor),
-            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            saveButton.centerYAnchor.constraint(equalTo: cancelButton.centerYAnchor),
-            saveButton.widthAnchor.constraint(equalTo: cancelButton.widthAnchor)
+            cancelButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
+            cancelButton.trailingAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: -4),
+            cancelButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -34),
+            cancelButton.heightAnchor.constraint(equalToConstant: 60),
+            
+            saveButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
+            saveButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
+            saveButton.leadingAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 4),
+            saveButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -34),
+            saveButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
@@ -142,7 +185,7 @@ final class NewTrackerViewController: UIViewController {
     
     @objc private func createButtonTapped() {
         dismiss(animated: true) {
-            self.delegate?.addNewTrackerCategory(TrackerCategory(title: "Новая категория", trackers: [Tracker(id: UUID(), text: self.trackerText, emoji: "❤️", color: .trRed, schedule: self.schedule)]))
+            self.delegate?.addNewTrackerCategory(TrackerCategory(title: "Новая категория", trackers: [Tracker(id: UUID(), text: self.trackerText, emoji: self.emoji, color: self.color, schedule: self.schedule)]))
         }
     }
     
@@ -178,6 +221,7 @@ extension NewTrackerViewController: UITableViewDataSource {
             cell.detailTextLabel?.text = currentCategory
         case 1:
             cell.textLabel?.text = "Расписание"
+            cell.detailTextLabel?.text = scheduleToString(for: schedule)
         default:
             break
         }
@@ -186,6 +230,14 @@ extension NewTrackerViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
+    }
+    
+    private func scheduleToString(for: [WeekDay]) -> String {
+        guard schedule.count != WeekDay.allCases.count else { return "Каждый день" }
+
+        let scheduleSorted = schedule.sorted()
+        let scheduleShortName = scheduleSorted.map { $0.shortName }.joined(separator: ", ")
+        return scheduleShortName
     }
 }
 
@@ -243,7 +295,17 @@ extension NewTrackerViewController: UITableViewDelegate {
 extension NewTrackerViewController: ScheduleViewControllerDelegate {
     func addNewSchedule(_ newSchedule: [WeekDay]) {
         schedule = newSchedule
-        
+        tableView.reloadData()
         buttonIsEnabled()
+    }
+}
+
+extension NewTrackerViewController: EmojiAndColorsCollectionDelegate {
+    func addNewEmoji(_ emoji: String) {
+        self.emoji = emoji
+    }
+    
+    func addNewColor(_ color: UIColor) {
+        self.color = color
     }
 }
