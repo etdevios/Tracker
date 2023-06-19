@@ -15,11 +15,12 @@ final class NewTrackerViewController: UIViewController {
     weak var delegate: NewTrackerViewControllerDelegate?
     var typeOfNewTracker: TypeTracker?
     private var heightTableView: CGFloat = 74
-    private var currentCategory: String? = "Новая категория"
     private var trackerText = ""
     private var schedule: [WeekDay] = []
     private var emoji = ""
     private var color: UIColor = .clear
+    
+    var lastCategory: String?
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -184,13 +185,14 @@ final class NewTrackerViewController: UIViewController {
     }
     
     @objc private func createButtonTapped() {
+        guard let lastCategory = lastCategory else { return }
         dismiss(animated: true) {
-            self.delegate?.addNewTrackerCategory(TrackerCategory(title: "Новая категория", trackers: [Tracker(id: UUID(), text: self.trackerText, emoji: self.emoji, color: self.color, schedule: self.schedule)]))
+            self.delegate?.addNewTrackerCategory(TrackerCategory(title: lastCategory, trackers: [Tracker(id: UUID(), text: self.trackerText, emoji: self.emoji, color: self.color, schedule: self.schedule)]))
         }
     }
     
     private func buttonIsEnabled() {
-        if textField.text?.isEmpty == false && ((currentCategory?.isEmpty) != nil) {
+        if textField.text?.isEmpty == false && ((lastCategory?.isEmpty) != nil) {
             saveButton.backgroundColor = .trBlack
             saveButton.setTitleColor(.trWhite, for: .normal)
             saveButton.isEnabled = true
@@ -218,7 +220,7 @@ extension NewTrackerViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0:
             cell.textLabel?.text = "Категория"
-            cell.detailTextLabel?.text = currentCategory
+            cell.detailTextLabel?.text = lastCategory
         case 1:
             cell.textLabel?.text = "Расписание"
             cell.detailTextLabel?.text = scheduleToString(for: schedule)
@@ -282,7 +284,12 @@ extension NewTrackerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            break
+            guard let categoriesVC = CategoriesAssembly().assemble(
+                    with: CategoryConfiguration(lastCategory: lastCategory)
+                ) as? CategoriesViewController
+            else { return }
+            categoriesVC.delegate = self
+            present(categoriesVC, animated: true)
         case 1:
             let scheduleVC = ScheduleViewController()
             scheduleVC.delegate = self
@@ -307,5 +314,12 @@ extension NewTrackerViewController: EmojiAndColorsCollectionDelegate {
     
     func addNewColor(_ color: UIColor) {
         self.color = color
+    }
+}
+
+extension NewTrackerViewController: CategoriesViewControllerDelegate {
+    func didSelectCategory(with name: String?) {
+        lastCategory = name
+        tableView.reloadData()
     }
 }
