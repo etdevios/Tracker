@@ -8,13 +8,15 @@
 import UIKit
 import CoreData
 
+protocol TrackerCategoryStoreDelegate: AnyObject {
+    func storeDidUpdate(_ store: TrackerCategoryStore)
+}
+
 final class TrackerCategoryStore: NSObject {
     private let context: NSManagedObjectContext
-    private var insertedIndexes: IndexSet?
-    private var deletedIndexes: IndexSet?
-    private var updatedIndexes: IndexSet?
-    private var movedIndexes: Set<StoreUpdate.Move>?
     private let trackerStore = TrackerStore()
+    
+    weak var delegate: TrackerCategoryStoreDelegate?
     
     convenience override init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistantConteiner.viewContext
@@ -106,30 +108,40 @@ final class TrackerCategoryStore: NSObject {
             let nsError = error as NSError
              fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
+    }
+    
+    func makeCategory(with label: String) throws {
+        let category = TrackerCategory(title: label, trackers: [])
+        let categoryCoreData = TrackerCategoryCoreData(context: context)
+        categoryCoreData.categoryTitle = category.title
+        categoryCoreData.trackers = NSSet(array: category.trackers)
         
+        try context.save()
+    }
+    
+    func deleteCategory(with category: TrackerCategory) throws {
+        if let category = try fetchCategory(with: category.title) {
+            context.delete(category)
+        }
+        
+        try context.save()
+    }
+    
+    func editCategory(from existingLabel: String, with label: String) throws {
+        guard let existingCategoryCD = try? fetchCategory(with: existingLabel) else { return }
+        try makeCategory(with: label)
+        guard let updatedCategoryCD = try? fetchCategory(with: label) else { return }
+        
+        updatedCategoryCD.trackers = existingCategoryCD.trackers
+        try context.save()
+        
+        guard let category = try? fetchCategories(from: existingCategoryCD) else { return }
+        try deleteCategory(with: category)
     }
 }
 
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            guard let indexPath = newIndexPath else { fatalError() }
-            insertedIndexes?.insert(indexPath.item)
-        case .delete:
-            guard let indexPath = indexPath else { fatalError() }
-            deletedIndexes?.insert(indexPath.item)
-        case .update:
-            guard let indexPath = indexPath else { fatalError() }
-            updatedIndexes?.insert(indexPath.item)
-        case .move:
-            guard let oldIndexPath = indexPath, let newIndexPath = newIndexPath else { fatalError() }
-            movedIndexes?.insert(.init(oldIndex: oldIndexPath.item, newIndex: newIndexPath.item))
-        @unknown default:
-            fatalError()
-        }
+        delegate?.storeDidUpdate(self)
     }
 }
