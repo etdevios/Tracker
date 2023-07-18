@@ -16,7 +16,7 @@ struct AlertModel {
     var cancelCompletion: ((UIAlertAction) -> Void)?
 }
 
-class AlertPresenter {
+final class AlertPresenter {
     func show(controller: UIViewController?, model: AlertModel) {
         let alert = UIAlertController(
             title: model.title,

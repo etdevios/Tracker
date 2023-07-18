@@ -101,7 +101,7 @@ final class TrackersViewController: UIViewController {
                 })
             })
         })
-                                        
+        
         if isCurrentDateTracker {
             updateVisibleCategories()
         }
@@ -258,14 +258,7 @@ extension TrackersViewController: TrackerCollectionViewCellDelegate {
 extension TrackersViewController: TypeNewTrackerDelegate {
     func addNewTrackerCategory(_ newTrackerCategory: TrackerCategory) {
         dismiss(animated: true)
-        var trackerCategory = newTrackerCategory
-        if trackerCategory.trackers[0].schedule.isEmpty {
-            let newSchedule = WeekDay.allCases
-            trackerCategory.trackers[0].schedule.append(contentsOf: newSchedule)
-            try! trackerCategoryStore.saveTracker(tracker: trackerCategory.trackers[0], to: trackerCategory.title)
-        } else {
-            try! trackerCategoryStore.saveTracker(tracker: newTrackerCategory.trackers[0], to: newTrackerCategory.title)
-        }
+        try! trackerCategoryStore.saveTracker(tracker: newTrackerCategory.trackers[0], to: newTrackerCategory.title)
         
         categories = trackerCategoryStore.categories
         

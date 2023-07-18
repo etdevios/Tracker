@@ -136,7 +136,6 @@ extension EmojiAndColorsCollection: UICollectionViewDelegate {
                 cell.layer.borderColor = cell.contentView.backgroundColor?.withAlphaComponent(0.3).cgColor
                 cell.layer.borderWidth = 3
                 delegate?.addNewColor(cell.contentView.backgroundColor ?? .clear)
-                
             default:
                 break
             }

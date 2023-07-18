@@ -22,7 +22,7 @@ final class CategoriesViewModel {
     init(categoryStore: TrackerCategoryStore, lastCategory: String?) {
         self.selectedCategoryName = lastCategory
         self.categoryStore = categoryStore
-        categories = getCategoriesFromStore()
+        categories = categoryStore.categories
     }
     
     func showAlertToDelete(_ category: TrackerCategory) {
@@ -48,9 +48,9 @@ final class CategoriesViewModel {
         guard let label = label else { return }
         do {
             try categoryStore.makeCategory(with: label)
-            categories = getCategoriesFromStore()
+            categories = categoryStore.categories
         } catch {
-            print(error.localizedDescription)
+            assertionFailure()
         }
     }
     
@@ -62,29 +62,23 @@ final class CategoriesViewModel {
         do {
             try categoryStore.editCategory(from: existingLabel, with: label)
         } catch {
-            print(error.localizedDescription)
+            assertionFailure()
         }
-        categories = getCategoriesFromStore()
+        categories = categoryStore.categories
     }
     
     func deleteCategory(category: TrackerCategory) {
         do {
             try categoryStore.deleteCategory(with: category)
-            categories = getCategoriesFromStore()
+            categories = categoryStore.categories
         } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    private func getCategoriesFromStore() -> [TrackerCategory] {
-        return categoryStore.categories.map {
-            TrackerCategory(title: $0.title, trackers: $0.trackers)
+            assertionFailure()
         }
     }
 }
 
 extension CategoriesViewModel: TrackerCategoryStoreDelegate {
     func storeDidUpdate(_ store: TrackerCategoryStore) {
-        categories = getCategoriesFromStore()
+        categories = categoryStore.categories
     }
 }

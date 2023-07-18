@@ -12,11 +12,11 @@ protocol CategoriesViewControllerDelegate: AnyObject {
 }
 
 final class CategoriesViewController: UIViewController {
+    weak var delegate: CategoriesViewControllerDelegate?
+    private let viewModel: CategoriesViewModel
+    
     private var heightTableView: Int = -1
     private var tableViewHeightConstraint: NSLayoutConstraint?
-    
-    weak var delegate: CategoriesViewControllerDelegate?
-    var viewModel: CategoriesViewModel
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()

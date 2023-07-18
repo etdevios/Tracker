@@ -16,7 +16,7 @@ final class NewTrackerViewController: UIViewController {
     var typeOfNewTracker: TypeTracker?
     private var heightTableView: CGFloat = 74
     
-    var lastCategory: String?
+    private var lastCategory: String?
     private var trackerText: String?
     private var schedule: [WeekDay]?
     private var emoji: String?
@@ -194,12 +194,20 @@ final class NewTrackerViewController: UIViewController {
             let lastCategory = lastCategory,
             let emoji = emoji,
             let color = color,
-            let schedule = schedule,
             let trackerText = trackerText
         else { return }
         
-        dismiss(animated: true) {
+        dismiss(animated: true) { [weak self] in
+            guard let self = self else { return }
+            switch self.typeOfNewTracker {
+            case .eventTracker:
+                self.delegate?.addNewTrackerCategory(TrackerCategory(title: lastCategory, trackers: [Tracker(id: UUID(), text: trackerText, emoji: emoji, color: color, schedule: WeekDay.allCases)]))
+                
+            case .habitTracker:
+                guard let schedule = schedule else { return }
                 self.delegate?.addNewTrackerCategory(TrackerCategory(title: lastCategory, trackers: [Tracker(id: UUID(), text: trackerText, emoji: emoji, color: color, schedule: schedule)]))
+            case .none: break
+            }
         }
     }
     
