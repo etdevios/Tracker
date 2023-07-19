@@ -69,19 +69,19 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            guard let indexPath = newIndexPath else { fatalError() }
+            guard let indexPath = newIndexPath else { return assertionFailure() }
             insertedIndexes?.insert(indexPath.item)
         case .delete:
-            guard let indexPath = indexPath else { fatalError() }
+            guard let indexPath = indexPath else { return assertionFailure() }
             deletedIndexes?.insert(indexPath.item)
         case .update:
-            guard let indexPath = indexPath else { fatalError() }
+            guard let indexPath = indexPath else { return assertionFailure() }
             updatedIndexes?.insert(indexPath.item)
         case .move:
-            guard let oldIndexPath = indexPath, let newIndexPath = newIndexPath else { fatalError() }
+            guard let oldIndexPath = indexPath, let newIndexPath = newIndexPath else { return assertionFailure() }
             movedIndexes?.insert(.init(oldIndex: oldIndexPath.item, newIndex: newIndexPath.item))
         @unknown default:
-            fatalError()
+            return assertionFailure()
         }
     }
 }
