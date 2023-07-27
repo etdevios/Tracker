@@ -1,0 +1,152 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Eduard Tokarev on 21.07.2023.
+  
+*/
+
+// Blue onboarding screen text
+"backgroundImage.blue.text" = "Отслеживайте только то, что хотите";
+
+// Red onboarding screen text
+"backgroundImage.red.text" = "Даже если это не литры воды и йога";
+
+// Onboarding button text
+"onboardingPageViewController.Button" = "Вот это технологии!";
+
+
+
+// Trackers tab bar text
+"trackers" = "Трекеры";
+
+// Search bar placeholder text
+"search" = "Поиск";
+
+// Filters button text
+"filters" = "Фильтры";
+
+// Text displayed on empty schedule
+"emptyTrackers.text" = "Что будем отслеживат?";
+
+// Alert delete tracker
+"alertTracker.text" = "Уверены что хотите удалить трекер?";
+
+// Pinned category
+"pinned" = "Закрепленные";
+
+
+// Tracker creation page name
+"trackerCreation" = "Создание трекера";
+
+// Event button title
+"event" = "Нерегулярное событие";
+
+// Habit button title
+"habit" = "Привычка";
+
+
+
+
+// New event
+"newEvent" = "Новое нерегулярное событие";
+
+// New habit
+"newHabit" = "Новая привычка";
+
+// Edit event
+"editEvent" = "Редактирование нерегулярного события";
+
+// Edit habit
+"editHabit" = "Редактирование привычки";
+
+// Tracker name text field placeholder
+"tracker.name" = "Введите название трекера";
+
+// Colors section label
+"colors" = "Цвета";
+
+// Emoji section label
+"emoji" = "Emoji";
+
+// Cancel button title
+"cancel" = "Отмена";
+
+// Create button title
+"create" = "Создать";
+
+// Create button title
+"save" = "Сохранить";
+
+// Limit on tracker name length
+"stringLengthLimit" = "Ограничение 38 символов";
+
+
+
+
+// Categories
+"category" = "Категория";
+
+//Empty category label text
+"emptyCategories.text" = "Привычки и события можно объединить по смыслу";
+
+// Add category button text
+"addCategory" = "Добавить категорию";
+
+// New category page name
+"newCategory" = "Новая категория";
+
+// Enter category name placeholder
+"enterCategoryName" = "Введите название категории";
+
+// Delete menu item text
+"delete" = "Удалить";
+
+// Edit menu item text
+"edit" = "Редактировать";
+
+// Alert delete category
+"alertCategory.text" = "Эта категория точно не нужна?";
+
+
+
+// Schedule
+"schedule" = "Расписание";
+
+// Ready button title
+"ready" = "Готово";
+
+// Every day
+"everyDay" = "Каждый день";
+
+
+
+// Text displayed on empty search
+"emptyPlaceholder.search" = "Ничего не найдено";
+
+// Pin menu item text
+"pin" = "Закрепить";
+
+// Pin menu item text
+"unPin" = "Открепить";
+
+
+
+// Statistics
+"statistics" = "Статистика";
+
+// Empty Statistics
+"emptyStatistics.text" = "Анализировать пока нечего";
+
+// Best period
+"bestPeriod" = "Лучший период";
+
+// Perfect days
+"perfectDays" = "Идеальные дни";
+
+// complited trackers
+"complitedTrackers" = "Трекеров завершено";
+
+// Medium value
+"mediumValue" = "Среднее значение";
+

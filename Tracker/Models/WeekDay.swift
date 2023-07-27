@@ -7,73 +7,55 @@
 
 import Foundation
 
-enum WeekDay: String, Comparable, CaseIterable {
-    case Понедельник
-    case Вторник
-    case Среда
-    case Четверг
-    case Пятница
-    case Суббота
-    case Воскресенье
-    
-    var dayNumberOfWeek: Int {
-        switch self {
-        case .Понедельник:
-            return 2
-        case .Вторник:
-            return 3
-        case .Среда:
-            return 4
-        case .Четверг:
-            return 5
-        case .Пятница:
-            return 6
-        case .Суббота:
-            return 7
-        case .Воскресенье:
-            return 1
-        }
-    }
+enum WeekDay: String, CaseIterable {
+    case monday = "Понедельник"
+    case tuesday = "Вторник"
+    case wednesday = "Среда"
+    case thursday = "Четверг"
+    case friday = "Пятница"
+    case saturday = "Суббота"
+    case sunday = "Воскресенье"
     
     var shortName: String {
         switch self {
-        case .Понедельник:
-            return "Пн"
-        case .Вторник:
-            return "Вт"
-        case .Среда:
-            return "Ср"
-        case .Четверг:
-            return "Чт"
-        case .Пятница:
-            return "Пт"
-        case .Суббота:
-            return "Сб"
-        case .Воскресенье:
-            return "Вс"
+        case .monday: return "Пн"
+        case .tuesday: return "Вт"
+        case .wednesday: return "Ср"
+        case .thursday: return "Чт"
+        case .friday: return "Пт"
+        case .saturday: return "Сб"
+        case .sunday: return "Вс"
         }
     }
     
-    private var sortOrder: Int {
-        switch self {
-        case .Понедельник:
-            return 0
-        case .Вторник:
-            return 1
-        case .Среда:
-            return 2
-        case .Четверг:
-            return 3
-        case .Пятница:
-            return 4
-        case .Суббота:
-            return 5
-        case .Воскресенье:
-            return 6
+    var localizedName: String {
+        NSLocalizedString(rawValue, comment: "")
+    }
+}
+
+extension WeekDay {
+    static func code(_ weekdays: [WeekDay]?) -> String? {
+        guard let weekdays else { return nil }
+        let indexes = weekdays.map { Self.allCases.firstIndex(of: $0) }
+        var result = ""
+        for i in 0..<7 {
+            if indexes.contains(i) {
+                result += "1"
+            } else {
+                result += "0"
+            }
         }
+        return result
     }
     
-    static func < (lhs: WeekDay, rhs: WeekDay) -> Bool {
-        return lhs.sortOrder < rhs.sortOrder
+    static func decode(from string: String?) -> [WeekDay]? {
+        guard let string else { return nil }
+        var weekdays = [WeekDay]()
+        for (index, value) in string.enumerated() {
+            guard value == "1" else { continue }
+            let weekday = Self.allCases[index]
+            weekdays.append(weekday)
+        }
+        return weekdays
     }
 }
