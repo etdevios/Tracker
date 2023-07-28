@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22F66" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22F82" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="TrackerCategoryCoreData" representedClassName="TrackerCategoryCoreData" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="categoryTitle" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="trackers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TrackerCoreData" inverseName="category" inverseEntity="TrackerCoreData"/>
     </entity>
     <entity name="TrackerCoreData" representedClassName="TrackerCoreData" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="isPinned" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="trackerColor" attributeType="String"/>
         <attribute name="trackerEmoji" attributeType="String"/>
         <attribute name="trackerId" attributeType="UUID" usesScalarValueType="NO"/>
@@ -14,7 +18,7 @@
         <relationship name="records" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TrackerRecordCoreData" inverseName="tracker" inverseEntity="TrackerRecordCoreData"/>
     </entity>
     <entity name="TrackerRecordCoreData" representedClassName="TrackerRecordCoreData" syncable="YES" codeGenerationType="class">
-        <attribute name="recordDate" attributeType="String"/>
+        <attribute name="recordDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="recordId" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="tracker" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerCoreData" inverseName="records" inverseEntity="TrackerCoreData"/>
     </entity>

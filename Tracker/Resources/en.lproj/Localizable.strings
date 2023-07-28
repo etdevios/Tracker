@@ -1,0 +1,153 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Eduard Tokarev on 21.07.2023.
+  
+*/
+
+// Blue onboarding screen text
+"backgroundImage.blue.text" = "Track only what you want";
+
+// Red onboarding screen text
+"backgroundImage.red.text" = "Even if it's not liters of water or yoga";
+
+// Onboarding button text
+"onboardingPageViewController.Button" = "This is technology!";
+
+
+
+// Trackers tab bar text
+"trackers" = "Trackers";
+
+// Search bar placeholder text
+"search" = "Search";
+
+// Filters button text
+"filters" = "Filters";
+
+// Text displayed on empty schedule
+"emptyTrackers.text" = "What will we track?";
+
+// Alert delete tracker
+"alertTracker.text" = "Are you sure?";
+
+// Pinned category
+"pinned" = "Pinned";
+
+
+// Tracker creation page name
+"trackerCreation" = "Tracker creation";
+
+// Event button title
+"event" = "Irregular event";
+
+// Habit button title
+"habit" = "Habit";
+
+
+
+
+// New event
+"newEvent" = "New Event";
+
+// New habit
+"newHabit" = "New habit";
+
+// Edit event
+"editEvent" = "Edit event";
+
+// Edit habit
+"editHabit" = "Edit habit";
+
+// Tracker name text field placeholder
+"tracker.name" = "Enter tracker name";
+
+// Colors section label
+"colors" = "Colors";
+
+// Emoji section label
+"emoji" = "Emoji";
+
+// Cancel button title
+"cancel" = "Cancel";
+
+// Create button title
+"create" = "Create";
+
+// Create button title
+"save" = "Save";
+
+// Limit on tracker name length
+"stringLengthLimit" = "38 character limit";
+
+
+
+
+// Categories
+"category" = "Category";
+
+//Empty category label text
+"emptyCategories.text" = "Habits and events can be combined in meaning";
+
+// Add category button text
+"addCategory" = "Add category";
+
+// New category page name
+"newCategory" = "New Category";
+
+// Enter category name placeholder
+"enterCategoryName" = "Enter category name";
+
+// Delete menu item text
+"delete" = "Delete";
+
+// Edit menu item text
+"edit" = "Edit";
+
+// Alert delete category
+"alertCategory.text" = "Are you sure?";
+
+
+
+// Schedule
+"schedule" = "Schedule";
+
+// Ready button title
+"ready" = "Ready";
+
+// Every day
+"everyDay" = "Every day";
+
+
+
+// Text displayed on empty search
+"emptyPlaceholder.search" = "Nothing found";
+
+// Pin menu item text
+"pin" = "Pin";
+
+// Pin menu item text
+"unPin" = "Unpin";
+
+
+
+// Statistics
+"statistics" = "Statistics";
+
+// Empty Statistics
+"emptyStatistics.text" = "Nothing to analyze";
+
+// Best period
+"bestPeriod" = "Best Period";
+
+// Perfect days
+"perfectDays" = "Perfect days";
+
+// complited trackers
+"complitedTrackers" = "Complited trackers";
+
+// Medium value
+"mediumValue" = "Medium value";
+
+
