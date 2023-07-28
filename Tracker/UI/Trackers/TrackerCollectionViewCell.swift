@@ -114,11 +114,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     private func changePin(for tracker: Tracker) {
-        if tracker.isPinned {
-            pinImage.isHidden = false
-        } else {
-            pinImage.isHidden = true
-        }
+        pinImage.isHidden = !tracker.isPinned
     }
     
     func increaseCount() {

@@ -8,7 +8,6 @@
 import UIKit
 
 final class StatisticCell: UITableViewCell {
-    
     //MARK: - Properties
     private let gradientBorderView: UIView = {
         let view = UIView()
@@ -59,10 +58,10 @@ final class StatisticCell: UITableViewCell {
             UIColor.color(from: "#46E69D").cgColor,
             UIColor.color(from: "#007BFA").cgColor,
         ]
-
+        
         gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
-
+        
         return gradientLayer
     }
     
@@ -72,7 +71,7 @@ final class StatisticCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         gradientBorder.removeFromSuperlayer()
-
+        
         DispatchQueue.main.async { [weak self] in
             self?.gradientBorderView.layer.insertSublayer(self?.gradientBorder ?? CAGradientLayer(), at: 0)
         }
@@ -81,7 +80,7 @@ final class StatisticCell: UITableViewCell {
     //MARK: - Methods
     func configureCell(with model: StatisticsCellModel) {
         contentView.backgroundColor = .trWhite
-                        
+        
         setElements()
         setupConstraints()
         

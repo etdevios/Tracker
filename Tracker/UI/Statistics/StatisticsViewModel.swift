@@ -38,9 +38,9 @@ final class StatisticsViewModel {
         }
         return result
     }()
-   
+    
     // MARK: - Observables
-   
+    
     @Observable
     private (set) var bestPeriod: Int = 0
     
@@ -65,7 +65,6 @@ final class StatisticsViewModel {
         observeMediumValue()
         checkIsStatisticsEmpty()
     }
-    
     
     private func observeBestPeriod() { }
     

@@ -80,7 +80,7 @@ final class CategoriesViewModel {
     }
     
     private func updateCategory(with label: String) {
-        
+        // TODO: - updateCategory(with label: String)
     }
 }
 

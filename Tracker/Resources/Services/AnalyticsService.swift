@@ -28,7 +28,7 @@ enum Items: String {
 
 struct AnalyticsService {
     static func initAppMetrica() {
-        guard let configuration = YMMYandexMetricaConfiguration(apiKey: "fbd90a54-bcad-4f17-8190-c86ff053a480") else { return }
+        guard let configuration = YMMYandexMetricaConfiguration(apiKey: K.API.yandexMetricaKey) else { return }
         YMMYandexMetrica.activate(with: configuration)
     }
     

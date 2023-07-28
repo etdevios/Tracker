@@ -71,12 +71,7 @@ final class StatisticViewController: UIViewController {
     
     private func bindingViewModel() {
         viewModel.$isEmptyPlaceholderHidden.bind { [weak self] isEmptyPlaceholderHidden in
-            if isEmptyPlaceholderHidden == false {
-                self?.showEmptyStatisticsPlaceholder()
-                return
-            } else {
-                self?.showStatistics()
-            }
+            self?.toggleStatisticsPlaceholder(show: isEmptyPlaceholderHidden)
         }
         
         viewModel.$bestPeriod.bind { [weak self] newValue in
@@ -104,17 +99,10 @@ final class StatisticViewController: UIViewController {
         tableView.reloadData()
     }
     
-    
-    private func showEmptyStatisticsPlaceholder() {
-        emptyStatisticsImageView.isHidden = false
-        emptyStatisticsLabel.isHidden = false
-        tableView.isHidden = true
-    }
-    
-    private func showStatistics() {
-        emptyStatisticsImageView.isHidden = true
-        emptyStatisticsLabel.isHidden = true
-        tableView.isHidden = false
+    private func toggleStatisticsPlaceholder(show: Bool) {
+        emptyStatisticsImageView.isHidden = show
+        emptyStatisticsLabel.isHidden = show
+        tableView.isHidden = !show
     }
     
     private func setLayout() {

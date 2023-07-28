@@ -39,7 +39,7 @@ final class ScheduleViewController: UIViewController {
         return button
     }()
     
-    private let preferredOrder = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
+    private let preferredOrder = WeekDay.allCases.map{$0.shortName}
     var selectedDays: [String]
     var provideSelectedDays: (([String]) -> Void)?
     
